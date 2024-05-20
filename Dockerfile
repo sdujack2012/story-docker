@@ -14,6 +14,7 @@ RUN apt install -y bash \
     ca-certificates \
     libsndfile1-dev \
     libgl1 \
+    ffmpeg \
     python3.10 \
     python3-pip \
     python3.10-venv && \
@@ -36,6 +37,10 @@ RUN python3.10 -m pip install --no-cache-dir fastapi \
 	uvicorn[standard] \
 	sentencepiece
 
+RUN python3.10 -m pip install --no-cache-dir TTS
+RUN python3.10 -m pip install -U openai-whisper
+RUN python3.10 -m pip install pydantic
+
 # Set up a new user named "user" with user ID 1000
 RUN useradd -m -u 1000 user
 # Switch to the "user" user
@@ -45,7 +50,8 @@ ENV HOME=/home/user \
 	PATH=/home/user/.local/bin:$PATH \
 	HF_HOME=/hf_home \
 	HF_HUB_CACHE=/hf_home/models \
-	HF_TOKEN=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
+	HF_TOKEN=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 \
+    TTS_HOME=/tts_home
 
 # Set the working directory to the user's home directory
 WORKDIR $HOME/app
